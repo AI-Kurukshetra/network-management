@@ -46,6 +46,7 @@ Create `.env.local` from `.env.example`.
 NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 OPENAI_API_KEY=your-openai-api-key
+SUPABASE_DB_URL=your-supabase-postgres-connection-string
 ```
 
 If Supabase variables are not set, the app runs against an in-memory fallback dataset so the UI remains usable locally.
@@ -84,11 +85,21 @@ Create this user manually from the Supabase dashboard:
 npm install
 ```
 
-2. Create the Supabase schema:
+2. Set up the Supabase database.
+
+If you prefer to manage schema and seed data manually in the Supabase dashboard, run these files in the SQL editor:
 
 ```sql
 -- run database/schema.sql
 -- then run supabase/seed.sql
+```
+
+Or use the provided npm commands with `SUPABASE_DB_URL` set:
+
+```bash
+npm run migrate
+npm run migrate:throughput
+npm run seed
 ```
 
 3. Start development:
@@ -98,6 +109,14 @@ npm run dev
 ```
 
 4. Open `http://localhost:3000`.
+
+## Database Files
+
+These files are included in the repo for reproducible setup, even if you choose to apply them manually in Supabase:
+
+- [database/schema.sql](/home/bacancy/Documents/cloud-native-network-management-platform/database/schema.sql)
+- [database/migrations/20260314_add_throughput_columns.sql](/home/bacancy/Documents/cloud-native-network-management-platform/database/migrations/20260314_add_throughput_columns.sql)
+- [supabase/seed.sql](/home/bacancy/Documents/cloud-native-network-management-platform/supabase/seed.sql)
 
 ## API Routes
 
