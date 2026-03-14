@@ -1,7 +1,11 @@
 import { redirectIfAuthenticated } from "@/lib/auth";
 import { LoginForm } from "@/components/auth/login-form";
 
-export default async function LoginPage() {
+export default async function LoginPage({
+  searchParams
+}: {
+  searchParams?: { redirectedFrom?: string };
+}) {
   await redirectIfAuthenticated();
 
   return (
@@ -15,7 +19,7 @@ export default async function LoginPage() {
           </p>
         </section>
         <section className="flex items-center">
-          <LoginForm />
+          <LoginForm redirectedFrom={searchParams?.redirectedFrom} />
         </section>
       </div>
     </div>

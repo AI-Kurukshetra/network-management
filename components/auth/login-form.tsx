@@ -2,16 +2,15 @@
 
 import { useState } from "react";
 import type { Route } from "next";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
 
-export function LoginForm() {
+export function LoginForm({ redirectedFrom }: { redirectedFrom?: string }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [email, setEmail] = useState("admin@ainoc.com");
   const [password, setPassword] = useState("admin123");
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +48,7 @@ export function LoginForm() {
       return;
     }
 
-    const destination = getSafeDestination(searchParams.get("redirectedFrom"));
+    const destination = getSafeDestination(redirectedFrom ?? null);
     router.replace(destination);
     router.refresh();
   };
