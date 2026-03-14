@@ -25,6 +25,8 @@ function createAlert(networkFunction: NetworkFunction): Alert[] {
       message: `${networkFunction.name} CPU saturation at ${networkFunction.cpu_usage.toFixed(1)}%.`,
       severity: networkFunction.cpu_usage > 96 ? "critical" : "medium",
       resolved: false,
+      resolution_comment: null,
+      resolved_at: null,
       created_at: new Date().toISOString(),
       network_function_id: networkFunction.id,
       slice_id: networkFunction.slice_id
@@ -37,6 +39,8 @@ function createAlert(networkFunction: NetworkFunction): Alert[] {
       message: `${networkFunction.name} latency exceeded threshold at ${networkFunction.latency.toFixed(1)} ms.`,
       severity: networkFunction.latency > 75 ? "critical" : "medium",
       resolved: false,
+      resolution_comment: null,
+      resolved_at: null,
       created_at: new Date().toISOString(),
       network_function_id: networkFunction.id,
       slice_id: networkFunction.slice_id

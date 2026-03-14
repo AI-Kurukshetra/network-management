@@ -30,6 +30,8 @@ export type Alert = {
   severity: AlertSeverity;
   resolved: boolean;
   created_at: string;
+  resolution_comment: string | null;
+  resolved_at: string | null;
   network_function_id: string | null;
   slice_id: string | null;
 };

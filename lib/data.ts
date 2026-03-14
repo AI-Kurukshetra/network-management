@@ -75,6 +75,17 @@ function normalizeMetricSnapshot(item: Partial<MetricSnapshot> & { throughput?: 
   };
 }
 
+function normalizeAlert(item: Partial<Alert>): Alert {
+  return {
+    ...(item as Alert),
+    resolved: Boolean(item.resolved),
+    resolution_comment: item.resolution_comment ?? null,
+    resolved_at: item.resolved_at ?? null,
+    network_function_id: item.network_function_id ?? null,
+    slice_id: item.slice_id ?? null
+  };
+}
+
 function seedSlices(): Slice[] {
   return [
     {
@@ -323,31 +334,41 @@ export async function listFunctions() {
 export async function listAlerts() {
   const client = getSupabaseClient();
   if (!client) {
-    return getMemoryStore().alerts;
+    return getMemoryStore().alerts.map(normalizeAlert);
   }
 
   return withSupabaseFallback(
     async () =>
       (((await safeQuery(
         client.from("alerts").select("*").order("created_at", { ascending: false })
-      )) ?? []) as Alert[]),
-    () => getMemoryStore().alerts
+      )) ?? []) as Alert[]).map(normalizeAlert),
+    () => getMemoryStore().alerts.map(normalizeAlert)
   );
 }
 
-export async function resolveAlert(id: string) {
+export async function updateAlertStatus(id: string, input: { resolved: boolean; comment: string }) {
   const client = getSupabaseClient();
+  const updatePayload = {
+    resolved: input.resolved,
+    resolution_comment: input.comment,
+    resolved_at: input.resolved ? nowIso() : null
+  };
+
   if (!client) {
     const store = getMemoryStore();
-    store.alerts = store.alerts.map((alert) => (alert.id === id ? { ...alert, resolved: true } : alert));
+    store.alerts = store.alerts.map((alert) =>
+      alert.id === id ? normalizeAlert({ ...alert, ...updatePayload }) : normalizeAlert(alert)
+    );
     return;
   }
 
   await withSupabaseFallback(
-    async () => safeQuery(client.from("alerts").update({ resolved: true }).eq("id", id)),
+    async () => safeQuery(client.from("alerts").update(updatePayload).eq("id", id)),
     async () => {
       const store = getMemoryStore();
-      store.alerts = store.alerts.map((alert) => (alert.id === id ? { ...alert, resolved: true } : alert));
+      store.alerts = store.alerts.map((alert) =>
+        alert.id === id ? normalizeAlert({ ...alert, ...updatePayload }) : normalizeAlert(alert)
+      );
     }
   );
 }

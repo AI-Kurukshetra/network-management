@@ -26,6 +26,8 @@ create table if not exists alerts (
   message text not null,
   severity text not null check (severity in ('low', 'medium', 'critical')),
   resolved boolean not null default false,
+  resolution_comment text,
+  resolved_at timestamptz,
   created_at timestamptz not null default now(),
   network_function_id uuid references network_functions(id) on delete set null,
   slice_id uuid references network_slices(id) on delete set null

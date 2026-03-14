@@ -6,6 +6,7 @@ import { SliceForm } from "@/components/slices/slice-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { formatDateTime } from "@/lib/utils";
 import type { Slice } from "@/types";
 
 export function SlicesTable({ initialSlices }: { initialSlices: Slice[] }) {
@@ -53,7 +54,7 @@ export function SlicesTable({ initialSlices }: { initialSlices: Slice[] }) {
                 <TableCell className="font-medium">{slice.name}</TableCell>
                 <TableCell>{slice.latency_target} ms</TableCell>
                 <TableCell>{slice.bandwidth} Mbps</TableCell>
-                <TableCell>{new Date(slice.created_at).toLocaleString()}</TableCell>
+                <TableCell>{formatDateTime(slice.created_at)}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
                     <SliceForm mode="edit" slice={slice} triggerLabel="Edit" onSaved={handleSave} />

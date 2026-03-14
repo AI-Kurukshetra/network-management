@@ -28,11 +28,13 @@ from (
 ) as seed(name, type, status, cpu_usage, latency, packet_loss, throughput, slice_id)
 on conflict (name) do nothing;
 
-insert into alerts (message, severity, resolved, network_function_id, slice_id)
+insert into alerts (message, severity, resolved, resolution_comment, resolved_at, network_function_id, slice_id)
 select
   'UPF-03 latency exceeded threshold at 57 ms.',
   'critical',
   false,
+  null,
+  null,
   nf.id,
   nf.slice_id
 from network_functions nf
