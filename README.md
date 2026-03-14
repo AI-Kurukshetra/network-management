@@ -67,15 +67,14 @@ Create the initial admin user in Supabase Auth with:
 - Email: `admin@ainoc.com`
 - Password: `admin123`
 
-You can create it from the Supabase dashboard under `Authentication > Users > Add user`, or with SQL in the SQL editor:
+Create this user manually from the Supabase dashboard:
 
-```sql
-select auth.admin_create_user(
-  email := 'admin@ainoc.com',
-  password := 'Admin9844!',
-  email_confirm := true
-);
-```
+1. Open `Authentication`.
+2. Go to `Users`.
+3. Click `Add user`.
+4. Enter email `admin@ainoc.com`.
+5. Enter password `admin123`.
+6. Mark the email as confirmed if Supabase prompts for it.
 
 ## Setup
 
